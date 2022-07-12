@@ -70,5 +70,36 @@ yargs.command({
     },
 
 })
+//update contact
+yargs.command({
+    command :'update',
+    describe:'update contact',
+    builder:{
+        name:{
+            describe    :'Contact Name',
+            demandOption:true,
+            type        :'string',
+        },
+        new_name:{
+            describe    :'Contact Name',
+            demandOption:false,
+            type        :'string',
+        },
+        email:{
+            describe    :'Contact email',
+            demandOption:false,
+            type        :'string',
+        },
+        mobile:{
+            describe    :'Contact mobile phone number',
+            demandOption:false,
+            type        :'string',
+        },
+    },
+    handler(argv){
+        contacts.updateContact(argv.name,argv.new_name,argv.email,argv.mobile)
+    },
+
+})
 
 yargs.parse();

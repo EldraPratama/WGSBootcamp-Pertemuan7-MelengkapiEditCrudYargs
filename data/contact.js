@@ -72,30 +72,68 @@ const listContact = () => {
 
 //fungsi melihat detail contact
 const detailContact = (name) => {
+    // variabel found untuk mengecek ada tidaknya nama yang dicari
+    let found = 0 
     const contacts = loadContact()
     console.log('Contact detail:')
     contacts.forEach((contact,i) => {
-        if (name == contact.name) {
+        if (name.toLowerCase() == contact.name.toLowerCase()) {
             console.log(`Name  : ${contact.name}`);          
             console.log(`Number: ${contact.phone}`);          
-            console.log(`Email : ${contact.email}`);          
+            if (contact.email) {
+                console.log(`Email : ${contact.email}`); 
+            }   
+            found ++        
         }
     });
+
+    cekPencarian(found,name)
+
 }
 
 //Fungsi menghapus contact
 const deleteContact = (name) => {
+    // variabel found untuk mengecek ada tidaknya nama yang dicari
+    let found = 0 
     const contacts = loadContact()
     contacts.forEach((contact,i) => {
-        if (contact.name == name ) {
+        if (contact.name.toLowerCase() == name.toLowerCase() ) {
             contacts.splice(i,1)
+            fs.writeFileSync('data/contacts.json',JSON.stringify(contacts));
+            console.log("Data contact berhasil di hapus");
+            found ++   
         }
     });
-    fs.writeFileSync('data/contacts.json',JSON.stringify(contacts));
-    console.log("Data contact berhasil di hapus");
+
+    cekPencarian(found,name)
 }
 
 
+// fungsi mengupdate contact
+const updateContact = (name,new_name,email,phone) => {
+    // variabel found untuk mengecek ada tidaknya nama yang dicari
+    let found = 0 
+    const contacts = loadContact()
+    contacts.forEach((contact,i) => {
+        if (contact.name.toLowerCase() == name.toLowerCase() ) {
+           if (email) {
+               cekEmail(email)
+           }
+           if (phone) {
+               cekNomer(phone)
+           }
+           new_name ? contacts[i].name   = new_name: contacts[i].name
+           email    ? contacts[i].email  = email   : contacts[i].email
+           phone    ? contacts[i].phone  = phone   : contacts[i].phone 
+           found ++          
+        }
+    });
+
+    cekPencarian(found,name)
+
+    fs.writeFileSync('data/contacts.json',JSON.stringify(contacts));
+    console.log("Data contact berhasil di update");
+}
 
 //fungsi validasi Email
 function cekEmail(email) {
@@ -117,5 +155,12 @@ function cekNomer(phone) {
     }
 }
 
+//fungsi mengecek ada tidaknya nama yg dicari
+function cekPencarian(found,name){
+    if (found != 1) {
+        console.log(`Nama ${name} tidak ditemukan`);
+        exit()
+    }
+}
 
-module.exports={SaveContact,listContact,detailContact,deleteContact}
+module.exports={SaveContact,listContact,detailContact,deleteContact,updateContact}
