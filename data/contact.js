@@ -53,12 +53,7 @@ const SaveContact = (name,email,phone)=>{
     }
  
  
-    //Cara Lain
-    // const duplikat = contacts.find((contact)=>contact.name === name)
-    // if(duplikat){
-    //     console.log(`Data nama sudah ada`);
-    //     return false;
-    // }
+
 }
 
 //fungsi melihat daftar contact
